@@ -9,15 +9,21 @@ export const AudioPlayer = ({ audio }) => {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.2);
-  const [backgroundSize, setBackgroundSize] = useState('25% 100%');
+  const [backgroundSize, setBackgroundSize] = useState('20% 100%');
   const volumeStep = 0.05;
+
+  const [progress, setProgress] = useState(0);
+  const progressMax = Math.round(String(audio.duration));
+  const backgroundSizeProgress = 0;
 
   useEffect(() => {
     if (!isAudio) setLoaded(true);
 
     const handlerSetLoaded = () => setLoaded(true);
     const handlerSetPlaying = () => setPlaying(false);
-    const handlerSetCurrentTime = () => setCurrentTime(audio.currentTime);
+    const handlerSetCurrentTime = () => {
+      setCurrentTime(audio.currentTime);
+    };
 
     audio.addEventListener('loadeddata', handlerSetLoaded);
     audio.addEventListener('ended', handlerSetPlaying);
@@ -32,6 +38,10 @@ export const AudioPlayer = ({ audio }) => {
     };
   }, []);
 
+  useEffect(() => {
+    setProgress(Math.round(currentTime));
+  }, [currentTime]);
+
   const handlerPlayPause = () => {
     setPlaying(() => {
       playing ? audio.pause() : audio.play();
@@ -39,11 +49,17 @@ export const AudioPlayer = ({ audio }) => {
     });
   };
 
+  const handlerChangeProgress = (e) => {
+    const progressValue = e.currentTarget.value;
+    setProgress(progressValue);
+    audio.currentTime = progressValue;
+  };
+
   const handlerChangeVolume = (e) => {
     const value = e.currentTarget.value;
     audio.volume = value;
     setVolume(value);
-    setBackgroundSize((value / volumeStep) * 6 + `% 100%`);
+    setBackgroundSize((value / volumeStep) * 5 + `% 100%`);
   };
 
   const btnClasses = playing
@@ -72,6 +88,17 @@ export const AudioPlayer = ({ audio }) => {
           disabled={!isAudio || (isAudio && !loaded)}
         ></button>
 
+        <input
+          className="progress"
+          type="range"
+          min="0"
+          max={progressMax ? progressMax : 0}
+          step="1"
+          value={progress}
+          onInput={handlerChangeProgress}
+          style={{ backgroundSize: `${backgroundSizeProgress}` }}
+        />
+
         <div className="player__time-volume-box time-volume-box">
           <span className="time-volume-box__time time">
             {getFormatTime(currentTime)}
@@ -81,7 +108,7 @@ export const AudioPlayer = ({ audio }) => {
             className="time-volume-box__volume volume"
             type="range"
             min="0"
-            max="0.8"
+            max="1"
             step={volumeStep}
             value={volume}
             onInput={handlerChangeVolume}

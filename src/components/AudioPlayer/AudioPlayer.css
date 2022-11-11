@@ -121,3 +121,7 @@ a.source:hover {
   background: url('../../assets/images/arrow-back.svg') no-repeat 0% center;
   padding-left: 26px;
 }
+
+.progress {
+  width: 100%;
+}
