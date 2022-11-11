@@ -1,0 +1,123 @@
+.player-wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.loader {
+  position: relative;
+  overflow: hidden;
+}
+
+.loader::after {
+  position: absolute;
+  content: '';
+  width: 200px;
+  height: 2px;
+  background: var(--color-secondary);
+  top: 0;
+  left: -200px;
+  animation: loading 0.9s infinite linear;
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(820px);
+  }
+}
+
+.source {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.4px;
+  color: var(--color-secondary-dark);
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 620px;
+  transition: 0.3s;
+}
+
+a.source:hover {
+  color: var(--color-accent);
+}
+
+.player-btn {
+  border: none;
+  width: 40px;
+  height: 40px;
+  outline: none;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.player-btn:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.player-btn--play {
+  background: url('../../assets/images/icon-play.svg') no-repeat center center;
+}
+
+.player-btn--pause {
+  background: url('../../assets/images/icon-pause.svg') no-repeat center center;
+}
+
+.player-box {
+  width: 620px;
+  height: 198px;
+  background: var(--color-basic-darker);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.time-volume-box {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.volume {
+  appearance: none;
+  margin-right: 15px;
+  width: 252px;
+  height: 2px;
+  background: linear-gradient(
+        var(--color-secondary-dark),
+        var(--color-secondary-dark)
+      )
+      no-repeat,
+    var(--color-secondary);
+  background-size: 70% 100%;
+  cursor: pointer;
+}
+
+.volume::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 12px;
+  background: var(--color-secondary-dark);
+  transition: background 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.time {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.3px;
+}
+
+.btn-back {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: -0.4px;
+  text-decoration: none;
+  color: var(--color-secondary-dark);
+  background: url('../../assets/images/arrow-back.svg') no-repeat 0% center;
+  padding-left: 26px;
+}
