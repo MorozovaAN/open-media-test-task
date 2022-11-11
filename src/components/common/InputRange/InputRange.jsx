@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const InputRange = ({
   classes,
@@ -9,14 +9,14 @@ export const InputRange = ({
   callback,
 }) => {
   const percentStep = 100 / (max / step);
-  const [progressBarBgSize, setProgressBarBgSize] = useState(
-    `${(inputValue / step) * percentStep}% 100%`
-  );
+  const [progressBarBgSize, setProgressBarBgSize] = useState('0% 100%');
+
+  useEffect(() => {
+    setProgressBarBgSize((inputValue / step) * percentStep + `% 100%`);
+  }, [inputValue, max]);
 
   const handlerChangeInput = (e) => {
-    const currentValue = e.currentTarget.value;
-    callback(currentValue);
-    setProgressBarBgSize((currentValue / step) * percentStep + `% 100%`);
+    callback(e.currentTarget.value);
   };
 
   return (
@@ -24,7 +24,7 @@ export const InputRange = ({
       className={classes}
       type="range"
       min={min}
-      max={max ? max : 0} 
+      max={max}
       step={step}
       value={inputValue}
       onInput={handlerChangeInput}
