@@ -12,7 +12,7 @@ export const AudioPlayer = ({ audio }) => {
   const [volume, setVolume] = useState(0.2);
   const [audioStream, setAudioStream] = useState(false);
   const [progressMaxValue, setProgressMaxValue] = useState(0);
-
+  
   useEffect(() => {
     if (!isAudio) setLoaded(true);
 
