@@ -1,4 +1,4 @@
-export const getFormatTime = (seconds) => {
+export const formatTime = (seconds) => {
   const s = seconds % 60;
   const m = Math.round((seconds - s) / 60) % 60;
 

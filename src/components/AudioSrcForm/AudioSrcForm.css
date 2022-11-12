@@ -26,8 +26,13 @@
   border: 0.5px solid transparent;
   transition: border 0.3s;
 }
+
 .input:focus {
   border: 0.5px solid var(--color-secondary-dark);
+}
+
+.input:disabled {
+  cursor: wait;
 }
 
 input::placeholder {
@@ -39,7 +44,7 @@ input::placeholder {
 }
 
 .input--error {
-  border: 0.5px solid #c6a827;
+  border: 0.5px solid var(--color-accent-darker);
   background: url('../../assets/images/icon-error.svg') no-repeat 98% 50%,
     var(--color-secondary);
   padding-right: 44px;
@@ -69,7 +74,7 @@ input::placeholder {
 .btn-submit:disabled {
   background-color: var(--color-basic-darker);
   border: 0.5px solid var(--color-basic-darker);
-  pointer-events: none;
+  cursor: wait;
 }
 
 .form__error {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isValidUrl } from '../../helpers/isValidUrl';
-import './Input.css';
+import './AudioSrcForm.css';
 
-export const Input = ({ setAudioURL }) => {
+export const AudioSrcForm = ({ setAudio }) => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState(false);
   const [validation, setValidation] = useState(false);
@@ -22,7 +22,7 @@ export const Input = ({ setAudioURL }) => {
 
         function urlValid() {
           audio.removeEventListener('canplay', urlValid);
-          setAudioURL(inputValue);
+          setAudio(audio);
           navigate('/player');
         }
 
@@ -45,7 +45,9 @@ export const Input = ({ setAudioURL }) => {
     setInputValue(e.currentTarget.value);
   };
 
-  const inputClasses = error ? 'input input--error' : 'input';
+  const inputClasses = error
+    ? 'input-btn-box__input input input--error'
+    : 'input-btn-box__input input';
 
   return (
     <form className="form" onSubmit={handlerSubmit}>

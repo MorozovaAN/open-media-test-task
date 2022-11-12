@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getFormatTime } from '../../helpers/getFormatTime';
+import { formatTime } from '../../helpers/formatTime';
 import { InputRange } from '../common/InputRange/InputRange';
 import './AudioPlayer.css';
 
@@ -20,11 +20,13 @@ export const AudioPlayer = ({ audio }) => {
       handlerSetProgressMaxValue();
     }
 
-    const handlerSetLoaded = () => setLoaded(true);
-    const handlerSetPlaying = () => setPlaying(false);
-    const handlerSetCurrentTime = () =>
+    function handlerSetPlaying() {
+      setPlaying(false);
+      audio.currentTime = 0;
+    }
+    function handlerSetCurrentTime() {
       setCurrentTime(Math.round(audio.currentTime));
-
+    }
     function handlerSetProgressMaxValue() {
       if (isFinite(audio.duration)) {
         setProgressMaxValue(Math.round(audio.duration));
@@ -32,15 +34,13 @@ export const AudioPlayer = ({ audio }) => {
         setAudioStream(true);
         setProgressMaxValue(currentTime);
       }
-    };
+    }
 
-    audio.addEventListener('loadeddata', handlerSetLoaded);
     audio.addEventListener('ended', handlerSetPlaying);
     audio.addEventListener('timeupdate', handlerSetCurrentTime);
     audio.addEventListener('durationchange', handlerSetProgressMaxValue);
 
     return () => {
-      audio.removeEventListener('loadeddata', handlerSetLoaded);
       audio.removeEventListener('ended', handlerSetPlaying);
       audio.removeEventListener('timeupdate', handlerSetCurrentTime);
       audio.removeEventListener('durationchange', handlerSetProgressMaxValue);
@@ -81,7 +81,7 @@ export const AudioPlayer = ({ audio }) => {
     : 'player-btn player-btn--play';
   const audioClasses = loaded
     ? 'player__player-box player-box'
-    : 'player__player-box player-box  loader';
+    : 'player__player-box player-box loader';
 
   return (
     <div className="player-wrapper player">
@@ -111,7 +111,7 @@ export const AudioPlayer = ({ audio }) => {
 
         <div className="player__time-volume-box time-volume-box">
           <span className="time-volume-box__time time">
-            {getFormatTime(currentTime)}
+            {formatTime(currentTime)}
           </span>
 
           <InputRange
@@ -124,10 +124,7 @@ export const AudioPlayer = ({ audio }) => {
           />
         </div>
       </div>
-      <Link
-        className="player__btn-back btn-back"
-        to="/"
-      >
+      <Link className="player__btn-back btn-back" to="/">
         Back
       </Link>
     </div>
