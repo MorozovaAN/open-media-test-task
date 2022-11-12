@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/open-media-test-task/static/css/main.8e0716a2.css",
-    "main.js": "/open-media-test-task/static/js/main.c5f64461.js",
+    "main.js": "/open-media-test-task/static/js/main.1ba92aa8.js",
     "index.html": "/open-media-test-task/index.html",
     "static/media/icon-error.svg": "/open-media-test-task/static/media/icon-error.c758267a3da8b0b6f621.svg",
     "static/media/arrow-submit.svg": "/open-media-test-task/static/media/arrow-submit.872ae50f4099a09d06ef.svg",
@@ -9,10 +9,10 @@
     "static/media/icon-pause.svg": "/open-media-test-task/static/media/icon-pause.a2c57db44874202a29ad.svg",
     "static/media/icon-play.svg": "/open-media-test-task/static/media/icon-play.9e665ded8609d2db8b82.svg",
     "main.8e0716a2.css.map": "/open-media-test-task/static/css/main.8e0716a2.css.map",
-    "main.c5f64461.js.map": "/open-media-test-task/static/js/main.c5f64461.js.map"
+    "main.1ba92aa8.js.map": "/open-media-test-task/static/js/main.1ba92aa8.js.map"
   },
   "entrypoints": [
     "static/css/main.8e0716a2.css",
-    "static/js/main.c5f64461.js"
+    "static/js/main.1ba92aa8.js"
   ]
 }
