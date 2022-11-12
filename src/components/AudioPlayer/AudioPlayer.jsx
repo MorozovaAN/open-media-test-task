@@ -10,6 +10,7 @@ export const AudioPlayer = ({ audio }) => {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.2);
+  const [audioStream, setAudioStream] = useState(false);
   const [progressMaxValue, setProgressMaxValue] = useState(0);
 
   useEffect(() => {
@@ -19,8 +20,14 @@ export const AudioPlayer = ({ audio }) => {
     const handlerSetPlaying = () => setPlaying(false);
     const handlerSetCurrentTime = () =>
       setCurrentTime(Math.round(audio.currentTime));
-    const handlerSetProgressMaxValue = () =>
-      setProgressMaxValue(Math.round(audio.duration));
+    const handlerSetProgressMaxValue = () => {
+      if (isFinite(audio.duration)) {
+        setProgressMaxValue(Math.round(audio.duration));
+      } else {
+        setAudioStream(true);
+        setProgressMaxValue(currentTime);
+      }
+    };
 
     audio.addEventListener('loadeddata', handlerSetLoaded);
     audio.addEventListener('ended', handlerSetPlaying);
@@ -36,6 +43,12 @@ export const AudioPlayer = ({ audio }) => {
       audio.currentTime = 0;
     };
   }, []);
+
+  useEffect(() => {
+    if (audioStream && currentTime > progressMaxValue) {
+      setProgressMaxValue(currentTime);
+    }
+  }, [currentTime]);
 
   const handlerPlayPause = () => {
     setPlaying(() => {
