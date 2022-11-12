@@ -5,22 +5,27 @@ import { InputRange } from '../common/InputRange/InputRange';
 import './AudioPlayer.css';
 
 export const AudioPlayer = ({ audio }) => {
-  const isAudio = audio.currentSrc;
+  const audioSrc = audio.src;
   const [loaded, setLoaded] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.2);
   const [audioStream, setAudioStream] = useState(false);
   const [progressMaxValue, setProgressMaxValue] = useState(0);
-  
+
   useEffect(() => {
-    if (!isAudio) setLoaded(true);
+    if (!audioSrc) setLoaded(true);
+    if (audio.readyState >= 2) {
+      setLoaded(true);
+      handlerSetProgressMaxValue();
+    }
 
     const handlerSetLoaded = () => setLoaded(true);
     const handlerSetPlaying = () => setPlaying(false);
     const handlerSetCurrentTime = () =>
       setCurrentTime(Math.round(audio.currentTime));
-    const handlerSetProgressMaxValue = () => {
+
+    function handlerSetProgressMaxValue() {
       if (isFinite(audio.duration)) {
         setProgressMaxValue(Math.round(audio.duration));
       } else {
@@ -80,13 +85,9 @@ export const AudioPlayer = ({ audio }) => {
 
   return (
     <div className="player-wrapper player">
-      {audio.currentSrc ? (
-        <a
-          href={audio.currentSrc}
-          className="player__source source"
-          title="Download "
-        >
-          {audio.currentSrc}
+      {audioSrc ? (
+        <a href={audioSrc} className="player__source source">
+          {audioSrc}
         </a>
       ) : (
         <p className="player__source source">no audio source</p>
@@ -96,7 +97,7 @@ export const AudioPlayer = ({ audio }) => {
         <button
           className={btnClasses}
           onClick={handlerPlayPause}
-          disabled={!isAudio || (isAudio && !loaded)}
+          disabled={!audioSrc || (audioSrc && !loaded)}
         ></button>
 
         <InputRange
@@ -123,7 +124,10 @@ export const AudioPlayer = ({ audio }) => {
           />
         </div>
       </div>
-      <Link className="player__btn-back btn-back" to="/">
+      <Link
+        className="player__btn-back btn-back"
+        to="/"
+      >
         Back
       </Link>
     </div>
