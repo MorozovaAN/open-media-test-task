@@ -6,6 +6,8 @@ import './AudioPlayer.css';
 
 export const AudioPlayer = ({ audio }) => {
   const audioSrc = audio.src;
+  const audioDurationSec = Math.round(audio.duration);
+  const canStartPlay = audio.readyState >= 3;
   const [loaded, setLoaded] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -15,37 +17,32 @@ export const AudioPlayer = ({ audio }) => {
 
   useEffect(() => {
     if (!audioSrc) setLoaded(true);
-    if (audio.readyState >= 2) {
+
+    if (canStartPlay) {
+      isFinite(audioDurationSec)
+        ? setProgressMaxValue(audioDurationSec)
+        : setAudioStream(true);
+
       setLoaded(true);
-      handlerSetProgressMaxValue();
     }
 
-    function handlerSetPlaying() {
+    function stopAudio() {
       setPlaying(false);
-      audio.currentTime = 0;
-    }
-    function handlerSetCurrentTime() {
-      setCurrentTime(Math.round(audio.currentTime));
-    }
-    function handlerSetProgressMaxValue() {
-      if (isFinite(audio.duration)) {
-        setProgressMaxValue(Math.round(audio.duration));
-      } else {
-        setAudioStream(true);
-        setProgressMaxValue(currentTime);
-      }
-    }
-
-    audio.addEventListener('ended', handlerSetPlaying);
-    audio.addEventListener('timeupdate', handlerSetCurrentTime);
-    audio.addEventListener('durationchange', handlerSetProgressMaxValue);
-
-    return () => {
-      audio.removeEventListener('ended', handlerSetPlaying);
-      audio.removeEventListener('timeupdate', handlerSetCurrentTime);
-      audio.removeEventListener('durationchange', handlerSetProgressMaxValue);
       audio.pause();
       audio.currentTime = 0;
+    }
+
+    function updateTime() {
+      setCurrentTime(Math.round(audio.currentTime));
+    }
+
+    audio.addEventListener('ended', stopAudio);
+    audio.addEventListener('timeupdate', updateTime);
+
+    return () => {
+      audio.removeEventListener('ended', stopAudio);
+      audio.removeEventListener('timeupdate', updateTime);
+      stopAudio();
     };
   }, []);
 
