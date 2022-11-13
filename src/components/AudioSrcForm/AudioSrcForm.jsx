@@ -16,22 +16,25 @@ export const AudioSrcForm = ({ audio }) => {
     if (isValidUrl(inputValue)) {
       audio.src = inputValue;
 
-      function urlNoValid() {
+      const validationHelper = () => {
         audio.removeEventListener('canplay', urlValid);
         audio.removeEventListener('error', urlNoValid);
+        setValidation(false);
+      };
+
+      const urlNoValid = () => {
+        validationHelper();
         setError(true);
-        setValidation(false);
       }
 
-      function urlValid() {
-        audio.removeEventListener('canplay', urlValid);
-        audio.removeEventListener('error', urlNoValid);
+      const urlValid = () => {
+        validationHelper();
         navigate('/player');
-        setValidation(false);
       }
 
-      audio.addEventListener('error', urlNoValid);
       audio.addEventListener('canplay', urlValid);
+      audio.addEventListener('error', urlNoValid);
+      
     } else {
       setError(true);
       setValidation(false);

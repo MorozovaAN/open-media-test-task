@@ -6,7 +6,6 @@ import './AudioPlayer.css';
 
 export const AudioPlayer = ({ audio }) => {
   const audioSrc = audio.src;
-  const audioDurationSec = Math.round(audio.duration);
   const canStartPlay = audio.readyState >= 3;
   const [loaded, setLoaded] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -16,32 +15,40 @@ export const AudioPlayer = ({ audio }) => {
   const [progressMaxValue, setProgressMaxValue] = useState(0);
 
   useEffect(() => {
-    if (!audioSrc) setLoaded(true);
+    const canPlayAudio = () => {
+      const audioDurationSec = Math.floor(audio.duration);
 
-    if (canStartPlay) {
       isFinite(audioDurationSec)
         ? setProgressMaxValue(audioDurationSec)
         : setAudioStream(true);
 
       setLoaded(true);
-    }
+    };
 
-    function stopAudio() {
+    const stopAudio = () => {
       setPlaying(false);
       audio.pause();
       audio.currentTime = 0;
+    };
+
+    const updateTimeAudio = () => {
+      setLoaded(true);
+      setCurrentTime(Math.floor(audio.currentTime));
+    };
+
+    if (!audioSrc) setLoaded(true);
+    if (canStartPlay) {
+      canPlayAudio();
     }
 
-    function updateTime() {
-      setCurrentTime(Math.round(audio.currentTime));
-    }
-
+    audio.addEventListener('loadeddata', canPlayAudio);
+    audio.addEventListener('timeupdate', updateTimeAudio);
     audio.addEventListener('ended', stopAudio);
-    audio.addEventListener('timeupdate', updateTime);
 
     return () => {
+      audio.removeEventListener('loadeddata', canPlayAudio);
+      audio.removeEventListener('timeupdate', updateTimeAudio);
       audio.removeEventListener('ended', stopAudio);
-      audio.removeEventListener('timeupdate', updateTime);
       stopAudio();
     };
   }, []);
@@ -60,6 +67,7 @@ export const AudioPlayer = ({ audio }) => {
   };
 
   const handlerChangeProgress = (currentValue) => {
+    setLoaded(false);
     setCurrentTime(() => {
       audio.currentTime = currentValue;
       return currentValue;
@@ -74,23 +82,24 @@ export const AudioPlayer = ({ audio }) => {
   };
 
   const btnClasses = playing
-    ? 'player-btn player-btn--pause'
-    : 'player-btn player-btn--play';
-  const audioClasses = loaded
+    ? 'player-box__player-btn player-btn player-btn--pause'
+    : 'player-box__player-btn player-btn player-btn--play';
+
+  const playerBoxClasses = loaded
     ? 'player__player-box player-box'
     : 'player__player-box player-box loader';
 
   return (
-    <div className="player-wrapper player">
+    <div className="player">
       {audioSrc ? (
-        <a href={audioSrc} className="player__source source">
+        <a href={audioSrc} className="player__src src">
           {audioSrc}
         </a>
       ) : (
-        <p className="player__source source">no audio source</p>
+        <p className="player__src src">no audio source</p>
       )}
 
-      <div className={audioClasses}>
+      <div className={playerBoxClasses}>
         <button
           className={btnClasses}
           onClick={handlerPlayPause}
@@ -98,7 +107,7 @@ export const AudioPlayer = ({ audio }) => {
         ></button>
 
         <InputRange
-          classes="player__progress progress"
+          classes="player-box__progress progress"
           min="0"
           max={progressMaxValue}
           step="1"
@@ -106,7 +115,7 @@ export const AudioPlayer = ({ audio }) => {
           callback={handlerChangeProgress}
         />
 
-        <div className="player__time-volume-box time-volume-box">
+        <div className="player-box__time-volume-box time-volume-box">
           <span className="time-volume-box__time time">
             {formatTime(currentTime)}
           </span>

@@ -1,4 +1,4 @@
-.player-wrapper {
+.player {
   display: flex;
   flex-direction: column;
   row-gap: 20px;
@@ -26,7 +26,7 @@
   }
 }
 
-.source {
+.src {
   font-size: 24px;
   line-height: 32px;
   letter-spacing: -0.4px;
@@ -39,7 +39,7 @@
   transition: 0.3s;
 }
 
-a.source:hover {
+a.src:hover {
   color: var(--color-accent);
 }
 
