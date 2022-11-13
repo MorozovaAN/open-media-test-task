@@ -5,12 +5,12 @@ import { AudioPlayer } from './components/AudioPlayer/AudioPlayer';
 import './App.css';
 
 export const App = () => {
-  const [audio, setAudio] = useState(new Audio());
+  const [audio] = useState(new Audio());
 
   return (
     <div className="app-wrapper">
       <Routes>
-        <Route path={'/'} element={<AudioSrcForm setAudio={setAudio} />} />
+        <Route path={'/'} element={<AudioSrcForm audio={audio} />} />
         <Route path={'/player'} element={<AudioPlayer audio={audio} />} />
       </Routes>
     </div>

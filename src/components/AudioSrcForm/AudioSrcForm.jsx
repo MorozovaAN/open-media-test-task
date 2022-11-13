@@ -1,43 +1,41 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isValidUrl } from '../../helpers/isValidUrl';
 import './AudioSrcForm.css';
 
-export const AudioSrcForm = ({ setAudio }) => {
+export const AudioSrcForm = ({ audio }) => {
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState(false);
   const [validation, setValidation] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (validation) {
-      if (isValidUrl(inputValue)) {
-        const audio = new Audio(inputValue);
-
-        function urlNoValid() {
-          audio.removeEventListener('error', urlNoValid);
-          setError(true);
-          setValidation(false);
-        }
-
-        function urlValid() {
-          audio.removeEventListener('canplay', urlValid);
-          setAudio(audio);
-          navigate('/player');
-        }
-
-        audio.addEventListener('error', urlNoValid);
-        audio.addEventListener('canplay', urlValid);
-      } else {
-        setError(true);
-        setValidation(false);
-      }
-    }
-  }, [validation]);
-
   const handlerSubmit = (e) => {
     e.preventDefault();
     setValidation(true);
+
+    if (isValidUrl(inputValue)) {
+      audio.src = inputValue;
+
+      function urlNoValid() {
+        audio.removeEventListener('canplay', urlValid);
+        audio.removeEventListener('error', urlNoValid);
+        setError(true);
+        setValidation(false);
+      }
+
+      function urlValid() {
+        audio.removeEventListener('canplay', urlValid);
+        audio.removeEventListener('error', urlNoValid);
+        navigate('/player');
+        setValidation(false);
+      }
+
+      audio.addEventListener('error', urlNoValid);
+      audio.addEventListener('canplay', urlValid);
+    } else {
+      setError(true);
+      setValidation(false);
+    }
   };
 
   const handlerChangeInputValue = (e) => {
