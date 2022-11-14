@@ -17,7 +17,7 @@ export const AudioSrcForm = ({ audio }) => {
       audio.src = inputValue;
 
       const validationHelper = () => {
-        audio.removeEventListener('canplay', urlValid);
+        audio.removeEventListener('loadedmetadata', urlValid);
         audio.removeEventListener('error', urlNoValid);
         setValidation(false);
       };
@@ -25,16 +25,15 @@ export const AudioSrcForm = ({ audio }) => {
       const urlNoValid = () => {
         validationHelper();
         setError(true);
-      }
+      };
 
       const urlValid = () => {
         validationHelper();
         navigate('/player');
-      }
+      };
 
-      audio.addEventListener('canplay', urlValid);
+      audio.addEventListener('loadedmetadata', urlValid);
       audio.addEventListener('error', urlNoValid);
-      
     } else {
       setError(true);
       setValidation(false);

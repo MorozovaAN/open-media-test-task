@@ -7,7 +7,7 @@ import './AudioPlayer.css';
 export const AudioPlayer = ({ audio }) => {
   const audioSrc = audio.src;
   const canStartPlay = audio.readyState >= 3;
-  const [loaded, setLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(0.2);
@@ -22,7 +22,7 @@ export const AudioPlayer = ({ audio }) => {
         ? setProgressMaxValue(audioDurationSec)
         : setAudioStream(true);
 
-      setLoaded(true);
+      setLoading(false);
     };
 
     const stopAudio = () => {
@@ -32,23 +32,23 @@ export const AudioPlayer = ({ audio }) => {
     };
 
     const updateTimeAudio = () => {
-      setLoaded(true);
+      setLoading(false);
       setCurrentTime(Math.floor(audio.currentTime));
     };
 
-    if (!audioSrc) setLoaded(true);
+    if (!audioSrc) setLoading(false);
     if (canStartPlay) {
       canPlayAudio();
     }
 
     audio.addEventListener('loadeddata', canPlayAudio);
     audio.addEventListener('timeupdate', updateTimeAudio);
+    audio.addEventListener('waiting', () => setLoading(true));
     audio.addEventListener('ended', stopAudio);
 
     return () => {
       audio.removeEventListener('loadeddata', canPlayAudio);
       audio.removeEventListener('timeupdate', updateTimeAudio);
-      audio.removeEventListener('ended', stopAudio);
       stopAudio();
     };
   }, []);
@@ -67,7 +67,7 @@ export const AudioPlayer = ({ audio }) => {
   };
 
   const handlerChangeProgress = (currentValue) => {
-    setLoaded(false);
+    setLoading(true);
     setCurrentTime(() => {
       audio.currentTime = currentValue;
       return currentValue;
@@ -85,9 +85,9 @@ export const AudioPlayer = ({ audio }) => {
     ? 'player-box__player-btn player-btn player-btn--pause'
     : 'player-box__player-btn player-btn player-btn--play';
 
-  const playerBoxClasses = loaded
-    ? 'player__player-box player-box'
-    : 'player__player-box player-box loader';
+  const playerBoxClasses = loading
+    ? 'player__player-box player-box loader'
+    : 'player__player-box player-box';
 
   return (
     <div className="player">
@@ -103,7 +103,7 @@ export const AudioPlayer = ({ audio }) => {
         <button
           className={btnClasses}
           onClick={handlerPlayPause}
-          disabled={!audioSrc || (audioSrc && !loaded)}
+          disabled={!audioSrc || (audioSrc && loading)}
         ></button>
 
         <InputRange

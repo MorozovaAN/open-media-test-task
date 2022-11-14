@@ -6,6 +6,7 @@ import './App.css';
 
 export const App = () => {
   const [audio] = useState(new Audio());
+  audio.playload = 'metadata';
 
   return (
     <div className="app-wrapper">
