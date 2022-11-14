@@ -5,7 +5,7 @@ import './AudioSrcForm.css';
 
 export const AudioSrcForm = ({ audio }) => {
   const [inputValue, setInputValue] = useState('');
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [validation, setValidation] = useState(false);
   const navigate = useNavigate();
 
@@ -17,31 +17,29 @@ export const AudioSrcForm = ({ audio }) => {
       audio.src = inputValue;
 
       const validationHelper = () => {
-        audio.removeEventListener('loadedmetadata', urlValid);
-        audio.removeEventListener('error', urlNoValid);
+        audio.removeEventListener('loadedmetadata', openPlayer);
         setValidation(false);
       };
 
-      const urlNoValid = () => {
-        validationHelper();
-        setError(true);
-      };
-
-      const urlValid = () => {
+      const openPlayer = () => {
         validationHelper();
         navigate('/player');
       };
 
-      audio.addEventListener('loadedmetadata', urlValid);
-      audio.addEventListener('error', urlNoValid);
+      audio.addEventListener('loadedmetadata', openPlayer);
+
+      audio.addEventListener('error', () => {
+        validationHelper();
+        setError('url has no audio source');
+      });
     } else {
-      setError(true);
+      setError('incorrect url');
       setValidation(false);
     }
   };
 
   const handlerChangeInputValue = (e) => {
-    setError(false);
+    setError('');
     setInputValue(e.currentTarget.value);
   };
 
@@ -61,7 +59,7 @@ export const AudioSrcForm = ({ audio }) => {
             disabled={validation}
             value={inputValue}
             onChange={handlerChangeInputValue}
-            onFocus={() => setError(false)}
+            onFocus={() => setError('')}
           />
           <button
             className="input-btn-box__btn-submit btn-submit"
@@ -70,7 +68,7 @@ export const AudioSrcForm = ({ audio }) => {
           />
         </div>
 
-        <p className="form__error error">{error && 'Error message here'}</p>
+        <p className="form__error error">{error}</p>
       </label>
     </form>
   );
