@@ -102,7 +102,21 @@ a.src:hover {
   height: 12px;
   background: var(--color-secondary-dark);
   transition: background 0.3s ease-in-out;
-  cursor: pointer;
+  border-radius: 0;
+  border: none;
+}
+
+.volume::-moz-range-thumb {
+  width: 16px;
+  height: 12px;
+  background: var(--color-secondary-dark);
+  transition: background 0.3s ease-in-out;
+  border-radius: 0;
+  border: none;
+}
+
+.volume::-moz-range-track {
+  padding: 6px 0;
 }
 
 .time {
@@ -137,4 +151,17 @@ a.src:hover {
   height: 12px;
   background: var(--color-secondary);
   border-radius: 6px;
+  border: none;
+}
+
+.progress::-moz-range-thumb {
+  width: 16px;
+  height: 12px;
+  background: var(--color-secondary);
+  border-radius: 6px;
+  border: none;
+}
+
+.progress::-moz-range-track {
+  padding: 6px 0;
 }
