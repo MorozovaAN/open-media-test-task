@@ -7,10 +7,12 @@
 
 :root {
   --color-basic: #eeeeee;
-  --color-basic-darker: #cfd3d6;
+  --color-basic-darker-100: #cfd3d6;
+  --color-basic-darker-200: #a4a3a4;
   --color-secondary: #ffffff;
   --color-secondary-dark: #1b191c;
   --color-accent: #f8d231;
+  --color-accent-lighter: #ffe157c7;
   --color-accent-darker: #c6a827;
 }
 

@@ -68,7 +68,7 @@ a.src:hover {
 .player-box {
   width: 620px;
   height: 198px;
-  background: var(--color-basic-darker);
+  background: var(--color-basic-darker-100);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -141,7 +141,7 @@ a.src:hover {
   height: 2px;
   background: linear-gradient(var(--color-secondary), var(--color-secondary))
       no-repeat,
-    #adacad;
+    var(--color-basic-darker-200);
   cursor: pointer;
 }
 

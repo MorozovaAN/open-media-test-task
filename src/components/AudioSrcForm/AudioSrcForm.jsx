@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isValidUrl } from '../../helpers/isValidUrl';
+import { LinksExamples } from '../LinksExamples/LinksExamples';
 import './AudioSrcForm.css';
 
 export const AudioSrcForm = ({ audio }) => {
@@ -38,6 +39,10 @@ export const AudioSrcForm = ({ audio }) => {
     }
   };
 
+  useEffect(() => {
+    if (inputValue.trim()) setError('');
+  }, [inputValue]);
+
   const handlerChangeInputValue = (e) => {
     setError('');
     setInputValue(e.currentTarget.value);
@@ -48,28 +53,31 @@ export const AudioSrcForm = ({ audio }) => {
     : 'input-btn-box__input input';
 
   return (
-    <form className="form" onSubmit={handlerSubmit}>
-      <label>
-        <p className="form__label-text label-text">Insert the link</p>
+    <>
+      <form className="form" onSubmit={handlerSubmit}>
+        <label>
+          <p className="form__label-text label-text">Insert the link</p>
 
-        <div className="form__input-btn-box input-btn-box">
-          <input
-            className={inputClasses}
-            placeholder="https://"
-            disabled={validation}
-            value={inputValue}
-            onChange={handlerChangeInputValue}
-            onFocus={() => setError('')}
-          />
-          <button
-            className="input-btn-box__btn-submit btn-submit"
-            type="submit"
-            disabled={validation}
-          />
-        </div>
+          <div className="form__input-btn-box input-btn-box">
+            <input
+              className={inputClasses}
+              placeholder="https://"
+              disabled={validation}
+              value={inputValue}
+              onChange={handlerChangeInputValue}
+              onFocus={() => setError('')}
+            />
+            <button
+              className="input-btn-box__btn-submit btn-submit"
+              type="submit"
+              disabled={validation}
+            />
+          </div>
+          <p className="form__error error">{error}</p>
+        </label>
+      </form>
 
-        <p className="form__error error">{error}</p>
-      </label>
-    </form>
+      <LinksExamples setInputValue={setInputValue} disabled={validation} />
+    </>
   );
 };
